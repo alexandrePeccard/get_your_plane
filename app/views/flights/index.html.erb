@@ -1,0 +1,114 @@
+<div class="container">
+	<h2> Search a flight ! </h2>
+	<form class="form" action="/search-flights" method="post">
+		<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+
+		<div class="form-row">
+			<div class="col">
+				<label for="airport_departure"> From Airport </label>
+				<select class="form-control js-example-basic-single" name="filters[airport][departure_code]">
+					<option selected disabled hidden value=""> None </option>
+					<% @codes.each do |code| %>
+						<option value="<%= code %>"> <%= code %> </option>
+					<% end %>
+				</select>
+			</div>
+
+			<div class="col">
+				<label for="airport_destination"> To Airport </label>
+				<select class="form-control js-example-basic-single" name="filters[airport][destination_code]">
+					<option selected disabled hidden value=""> None </option>
+					<% @codes.each do |code| %>
+						<option value="<%= code %>"> <%= code %> </option>
+					<% end %>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="col">
+				<label for="filters[airport][departure]"> From City </label>
+				<select class="form-control js-example-basic-single" name="filters[airport][departure_city]">
+					<option selected disabled hidden value=""> None </option>
+					<% @cities.each do |city| %>
+						<option value="<%= city %>"> <%= city %> </option>
+					<% end %>
+				<!-- <input class="form-control" type="text" name="filters[airport][departure]" placeholder="From" /> -->
+				</select>
+			</div>
+			<div class="col">
+				<label for="filters[airport][destination]"> To City </label>
+				<select class="form-control js-example-basic-single" name="filters[airport][destination_city]">
+					<option selected="selected" value=""> None </option>
+					<% @cities.each do |city| %>
+						<option value="<%= city %>"> <%= city %> </option>
+					<% end %>
+				</select>
+					<!-- <input class="form-control" type="text" name="filters[airport][destination]" placeholder="To" /> -->
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="col">
+				<label for=""> Date de départ </label>
+				<input class="form-control datepicker" type="date" name="filters[flights][departure_date]" placeholder="From" />
+			</div>
+
+			<div class="col">
+				<label for=""> Date d'arrivée </label>
+				<input class="form-control datepicker"  type="date" name="filters[flights][arrival_date]" placeholder="To" />
+			</div>
+		</div>
+
+		<div class="form-row">
+			<div class="col">
+				<input class="btn btn-primary" type="submit" value="Validate filters" />
+			</div>
+		</div>
+	</form>
+</div>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th> Departure </th>
+						<th> Destination </th>
+						<th> Departure Date </th>
+						<th> Arrival Date </th>
+					</tr>
+				</thead>
+				<tbody>
+					<% @flights.each do |flight| %>
+						<tr>
+							<td>
+								<%= flight.departure.country %> | <bold> <%= flight.departure.city%> </bold> | <%= flight.departure.airport_code %>
+							</td>
+
+							<td>
+								<%= flight.destination.country %> | <bold> <%= flight.destination.city %> </bold> | <%= flight.destination.airport_code %>
+							</td>
+
+							<td>
+								<%= flight.departure_date %>
+							</td>
+
+							<td>
+								<%= flight.arrival_date %>
+							</td>
+
+						</tr>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<script>
+	$(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+	</script>
