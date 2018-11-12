@@ -12,7 +12,7 @@ require 'date'
 durations = [60, 500, 800, 40, 225, 740, 400, 285, 612, 178, 80]
 
 # creation of airports
-200.times do
+10.times do
 	city = Faker::Address.city
 	code = ""
 
@@ -26,7 +26,7 @@ end
 
 
 # creation of flights
-100.times do
+200.times do
 	#compute the maximum of seats on this flight
 	max_seats = rand(50..500)
 
@@ -44,8 +44,8 @@ end
 		available_seats: max_seats,
 		duration: duration,
 
-		departure: Airport.find(rand(1..50)),
-		destination: Airport.find(rand(1..50)),
+		departure: Airport.find(rand(1..10)),
+		destination: Airport.find(rand(1..10)),
 
 		departure_date: Date.parse(departure.to_s),
 		departure_hour: departure.strftime('%H'),

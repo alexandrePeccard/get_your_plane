@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_09_140123) do
+ActiveRecord::Schema.define(version: 2018_11_11_151240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,18 @@ ActiveRecord::Schema.define(version: 2018_11_09_140123) do
     t.string "airport_code"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "bookings", force: :cascade do |t|
+    t.bigint "flight_id"
+    t.index ["flight_id"], name: "index_bookings_on_flight_id"
+  end
+
+  create_table "bookings_passengers", id: false, force: :cascade do |t|
+    t.bigint "booking_id"
+    t.bigint "passenger_id"
+    t.index ["booking_id"], name: "index_bookings_passengers_on_booking_id"
+    t.index ["passenger_id"], name: "index_bookings_passengers_on_passenger_id"
   end
 
   create_table "flights", force: :cascade do |t|
@@ -41,6 +53,12 @@ ActiveRecord::Schema.define(version: 2018_11_09_140123) do
     t.index ["destination_id"], name: "index_flights_on_destination_id"
   end
 
+  create_table "passengers", force: :cascade do |t|
+    t.string "firstname"
+    t.string "lastname"
+    t.string "email"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "firstname"
     t.string "lastname"
@@ -50,4 +68,7 @@ ActiveRecord::Schema.define(version: 2018_11_09_140123) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "bookings", "flights"
+  add_foreign_key "bookings_passengers", "bookings"
+  add_foreign_key "bookings_passengers", "passengers"
 end

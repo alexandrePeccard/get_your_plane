@@ -5,6 +5,22 @@
 
 		<div class="form-row">
 			<div class="col">
+	  		<label for="filters[all-results]"> Show flights matching all filters or at least one filter ? </label>
+				<div class="radio">
+		  		<label>
+		  			<input type="radio" name="filters[criteria]" value="true" > <%= "all".capitalize %>
+		  		</label>
+	  		</div>
+				<div class="radio">	
+		  		<label>
+		  			<input type="radio" name="filters[criteria]" value="false" > <%= "at least One".capitalize %>
+		  		</label>
+		  	</div>
+		  </div>
+		</div>
+
+		<div class="form-row">
+			<div class="col">
 				<label for="airport_departure"> From Airport </label>
 				<select class="form-control js-example-basic-single" name="filters[airport][departure_code]">
 					<option selected disabled hidden value=""> None </option>
@@ -68,10 +84,22 @@
 	</form>
 </div>
 
-
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
+			<form action="/prepare_booking" method="post" class="form form-horizontal">
+				<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+				<div class="form-row">
+					<div class="col">
+						<input type="submit" class="btn btn-primary" value="Book !"/>
+					</div>
+				</div>
+				<div class="form-row">
+					<div class="col">
+						<label> Passengers </label>
+						<input id="passengers_number" name="book[passengers]" type="number" min="1" max="5" value="1"/>
+					</div>
+				</div>
 			<table class="table table-condensed">
 				<thead>
 					<tr>
@@ -79,6 +107,7 @@
 						<th> Destination </th>
 						<th> Departure Date </th>
 						<th> Arrival Date </th>
+						<th> Booking </th>
 					</tr>
 				</thead>
 				<tbody>
@@ -93,22 +122,35 @@
 							</td>
 
 							<td>
-								<%= flight.departure_date %>
+								<%= flight.departure_date.strftime("%d/%m/%y") %>
+								<br>
+								<%= sprintf '%02d', flight.departure_hour %>:<%= sprintf '%02d', flight.departure_minutes %>
 							</td>
 
 							<td>
-								<%= flight.arrival_date %>
+								<%= flight.arrival_date.strftime("%d/%m/%y") %>
+								<br>
+								<%= sprintf '%02d', flight.arrival_hour %>:<%= sprintf '%02d', flight.arrival_minutes %>
 							</td>
 
+							<td>
+								<div class="form-row">
+									<div class="col">
+										<label> Book </label>
+										<input name="book[flight_id]" type="radio" value="<%= flight.id %>"/>
+									</div>
+								</div>
+							</td>
 						</tr>
 					<% end %>
 				</tbody>
 			</table>
+			</form>
 		</div>
 	</div>
 </div>
 <script>
 	$(document).ready(function() {
     $('.js-example-basic-single').select2();
-});
-	</script>
+  });
+</script>

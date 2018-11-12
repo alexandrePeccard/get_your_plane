@@ -1,7 +1,11 @@
 class FlightsController < ApplicationController
+	include FlightsHelper
+	before_action :set_request_params
+
 	def index
 		@codes = Airport.order(:airport_code).all.pluck(:airport_code)
 		@cities = Airport.order(:city).all.pluck(:city)
+
 		if params[:flights]
 			@flights = Flight.where(id: params[:flights])
 		else
@@ -9,45 +13,39 @@ class FlightsController < ApplicationController
 		end
 	end
 
-	def get_flights_filters
-		flights_search_params = {}
-		if params[:filters][:airport][:departure_code] && params[:filters][:airport][:departure_code] != ""
-			@departures_airports = Airport.where("lower(airport_code) = ?", params[:filters][:airport][:departure_code].lstrip.rstrip.downcase).pluck(:id)
-			flights_search_params[:departure_id] = @departures_airports
-		end
+	def prepare_booking
 
-		if params[:filters][:airport][:destination_code] && params[:filters][:airport][:destination_code] != ""
-			@departures_airports = Airport.where("lower(airport_code) = ?", params[:filters][:airport][:destination_code].lstrip.rstrip.downcase).pluck(:id)
-			flights_search_params[:destination_id] = @departures_airports
-		end
-
-		if params[:filters][:airport][:departure_city] && params[:filters][:airport][:departure_city] != ""
-			@departures_airports = Airport.where("lower(city) = ?", params[:filters][:airport][:departure_city].lstrip.rstrip.downcase).pluck(:id)
-			flights_search_params[:departure_id] = @departures_airports
-		end
-
-		if params[:filters][:airport][:destination_city] && params[:filters][:airport][:destination_city] != ""
-			@destination_airports = Airport.where("lower(city) = ?", params[:filters][:airport][:destination_city].lstrip.rstrip.downcase).pluck(:id)
-			flights_search_params[:destination_id] = @destination_airports
-		end
-
-		if params[:filters][:flights][:departure_date] && params[:filters][:flights][:departure_date] != ""
-			flights_search_params[:departure_date] = Date.parse(params[:filters][:flights][:departure_date])
-		end
-
-		if params[:filters][:flights][:arrival_date] && params[:filters][:flights][:arrival_date] != ""
-			flights_search_params[:arrival_date] = Date.parse(params[:filters][:flights][:arrival_date])
-		end
+		permitted = params.require(:book).permit(:flight_id, :passengers)
+		permitted
+		permitted.permitted?
 		
-		@flights = Flight.where(flights_search_params).pluck(:id)
-		params = {}
+		redirect_to controller: 'bookings', action: 'new', params: permitted 
+	end
+
+	def get_flights_filters
+		flights_search_parameters = compute_filters_parameters
+		@flights = []
+
+		if params[:filters][:criteria] == true.to_s
+			# si on veut n'afficher que les vols qui correspondent à tous les critères
+			@flights = Flight.where(flights_search_parameters).pluck(:id)
+		else
+			# si on souhaite afficher tous les vols qui correspondent à au moins un critère
+			for k, v in flights_search_parameters
+				@flights << Flight.where({ k => v}).pluck(:id)
+			end
+		end
+		@flights = @flights.flatten
+
+		redirect_params = {}
 
 		if @flights.any?
 			flash[:success] = "Un ou plusieurs vols correspondent à vos critères de recherche."
-			params = { flights: @flights }
+			redirect_params = { flights: @flights }
 		else
 			flash[:warning] = "Aucun vol dispopnible correspondant à vos critères !"
 		end
-		redirect_to controller: 'flights', action: 'index', params: params
+
+		redirect_to controller: 'flights', action: 'index', params: redirect_params
 	end
 end
