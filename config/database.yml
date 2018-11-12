@@ -81,5 +81,5 @@ test:
 production:
   <<: *default
   database: get_your_plane_production
-  username: get_your_plane
+  username: <%= ENV['GET_YOUR_PLANE_DATABASE_USER'] %>
   password: <%= ENV['GET_YOUR_PLANE_DATABASE_PASSWORD'] %>
