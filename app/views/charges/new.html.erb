@@ -1,0 +1,38 @@
+<div class="container">
+  <%= form_tag charges_path do %>
+    <article>
+      <% if flash[:error].present? %>
+        <div id="error_explanation">
+          <p><%= flash[:error] %></p>
+        </div>
+      <% end %>
+      <label class="amount">
+        <span>Amount: $<%= @ammount_to_pay %></span>
+      </label>
+    </article>
+
+  <!--   <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+            data-key="<%= Rails.configuration.stripe[:publishable_key] %>"
+            data-description="A month's subscription"
+            data-amount="<%= @ammount_to_pay %>"
+            data-locale="auto"></script> -->
+  <% end %>
+  <button id="payment_submit" class="btn btn-primary">Valider</button>
+</div>
+  <script>
+    // sleep time expects milliseconds
+    function sleep (time) {
+      return new Promise((resolve) => setTimeout(resolve, time));
+    }
+
+    $(document).ready(function() {
+      $('#payment_submit').on('click', function() {
+        alert('Comme c\'est un test on ne va pas vraiment payer ! ');
+      
+        sleep(2000).then(() => {
+          alert('Mais du coup on va t\'envoyer un mail pour tester la feature !');
+          window.location.href = "http://127.0.0.1:3000/booking_success/<%= @booking_id %>";
+        });
+      });
+  });
+  </script>

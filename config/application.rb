@@ -1,13 +1,21 @@
 require_relative 'boot'
 
 require 'rails/all'
-
-# Require the gems listed in Gemfile, including any gems
-# you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+Dotenv::Railtie.load
 module GetYourPlane
   class Application < Rails::Application
+  	config.action_mailer.delivery_method = :mailjet
+    config.action_mailer.smtp_settings = {
+              :address => "in-v3.mailjet.com",
+              :enable_starttls_auto => true,
+              :port => 465,
+              :authentication => 'plain',
+              :user_name => ENV["API_PUBLIC_KEY"],
+              :password => ENV["API_SECRET_KEY"]
+            }
+  	# config.action_mailer.delivery_method = :mailjet_api
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 

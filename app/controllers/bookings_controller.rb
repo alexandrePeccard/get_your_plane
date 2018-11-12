@@ -11,10 +11,11 @@ class BookingsController < ApplicationController
 		b = Booking.new(flight_id: params[:flight_id])
 		for k, v in booking_params.to_h[:passengers_attributes]
 			passenger = Passenger.new(firstname: v[:firstname], lastname: v[:lastname], email: v[:email])
-			# passenger.bookings << b
 			b.passengers << passenger
 		end
 
-		b.save
+		b = b.save
+
+		redirect_to controller: 'charges', action: 'new', params: { booking_id: Booking.last.id }
 	end
 end

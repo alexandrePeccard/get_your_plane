@@ -54,5 +54,6 @@ end
 		arrival_hour: arrival.strftime('%H'),
 		arrival_minutes: arrival.strftime('%M'),
 		arrival_date: Date.parse(arrival.to_s),
+		ticket_cost: 100.00
 	).save
 end
