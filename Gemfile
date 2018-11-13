@@ -16,6 +16,9 @@ gem 'uglifier', '>= 1.3.0'
 
 gem 'faker'
 gem 'devise'
+gem 'carrierwave'
+gem "mini_magick"
+gem 'paperclip'
 gem 'stripe'
 gem 'mailjet'
 gem 'dotenv-rails'
