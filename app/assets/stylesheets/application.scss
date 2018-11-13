@@ -1,0 +1,52 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+html {
+  height: 100%;
+
+}
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font: 16px Sans-Serif;
+  height: 100vh; /* Avoid the IE 10-11 `min-height` bug. */
+
+}
+img {
+  image-rendering: auto;
+}
+.content {
+  flex: 1 0 auto; /* Prevent Chrome, Opera, and Safari from letting these items shrink to smaller than their content's default minimum size. */
+  padding: 20px;
+  background-size:cover;
+  background:url("background_0.jpg") no-repeat center center fixed; 
+}
+
+* {
+  box-sizing: border-box;
+}
+h1 {
+  margin: 0 0 20px 0;
+}
+p {
+  margin: 0 0 20px 0;
+}
+.content {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}

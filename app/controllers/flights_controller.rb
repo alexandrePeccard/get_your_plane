@@ -5,12 +5,6 @@ class FlightsController < ApplicationController
 	def index
 		@codes = Airport.order(:airport_code).all.pluck(:airport_code)
 		@cities = Airport.order(:city).all.pluck(:city)
-
-		if params[:flights]
-			@flights = Flight.where(id: params[:flights])
-		else
-			@flights = Flight.all
-		end
 	end
 
 	def prepare_booking
@@ -46,6 +40,12 @@ class FlightsController < ApplicationController
 			flash[:warning] = "Aucun vol dispopnible correspondant à vos critères !"
 		end
 
-		redirect_to controller: 'flights', action: 'index', params: redirect_params
+		redirect_to controller: 'flights', action: 'flights_results', params: redirect_params
+	end
+
+	def flights_results
+		@flights = Flight.where(id: params[:flights])
+
+		render 'flights_results'
 	end
 end

@@ -1,16 +1,36 @@
-<%= form_for @booking, url: { action: "create" }, html: { class: "nifty_form" } do |f| %>
-	<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-	<%= hidden_field_tag :flight_id, @flight_id %>
+<div id="flights"class="container">
+  <h2> Please type your passenger's informations to validate the booking. </h2>
+  <%= form_for @booking, url: { action: "create" }, html: { class: "form" } do |f| %>
+  	<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+  	<%= hidden_field_tag :flight_id, @flight_id %>
+  	<div class="form-row">
+  	<%= f.fields_for :passengers do |p| %>
+  	<div class="col">
+  		<div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-user-circle" aria-hidden="true"></i>
+        </span>
+        <%= p.text_field :firstname, autofocus: true, autocomplete: "firstname", class: 'form-control', placeholder: "Firstname" %>
+      </div>
 
-	<%= f.fields_for :passengers do |p| %>
-		<%= p.label :firstname %>
-		<%= p.text_field :firstname, class: 'form-control' %>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-user-circle" aria-hidden="true"></i>
+        </span>
+        <%= p.text_field :lastname, autofocus: true, autocomplete: "lastname", class: 'form-control', placeholder: "Lastname" %>
+      </div>
 
-		<%= p.label :lastname %>
-		<%= p.text_field :lastname, class: 'form-control' %>
-
-		<%= p.label :email %>
-		<%= p.email_field :email, class: 'form-control' %>
-	<% end %>
-	<%= f.submit "Create" %>
-<% end %>
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-address-card" aria-hidden="true"></i>
+        </span>
+        <%= p.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class: "form-control" %>
+      </div>
+    </div>
+    <%end%>
+  	<div class="card-footer text-center">
+  		<%= f.submit "Create", class: "btn btn-primary btn-round btn-lg" %>
+  	</div>
+  </div>
+  <% end %>
+</div>

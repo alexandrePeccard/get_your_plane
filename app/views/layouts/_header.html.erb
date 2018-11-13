@@ -1,0 +1,32 @@
+<nav class="nav">
+	<ul class="navbar">
+		<li>
+			<a href="" class="nav-link">Get your Plane</a>
+		</li>
+		<li class="">
+			<a class="nav-link" href="/"> Home </a>
+		</li>
+
+		<li class="">
+			<a class="nav-link" href="/flights"> Flights </a>
+		</li>
+
+		<% if user_signed_in? %>
+			<li class="">
+				<%= link_to "Sign Out", destroy_user_session_path, method: :delete, class: "nav-link" %>
+			</li>
+
+			<li class="">
+				<a class="" href="/profile"> Profil </a>
+			</li>
+		<% else %>
+			<li class="">
+				<%= link_to "Sign Up", new_user_registration_path, class: "nav-link" %>
+			</li>
+
+			<li class="">
+				<%= link_to "Sign In", new_user_session_path, class: "nav-link" %>
+			</li>
+		<% end %>
+	</ul>
+</nav>

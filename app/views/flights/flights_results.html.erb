@@ -1,0 +1,66 @@
+<% if @flights %>
+<div class="container"id="flights">
+		<div  class="row">
+			<div class="col-md-12">
+				<form action="/prepare_booking" method="post" class="form form-horizontal" >
+					<%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+					<div class="form-row">
+						<div class="col">
+							<input type="submit" class="btn btn-primary" value="Book !"/>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="col">
+							<label> Passengers </label>
+							<input id="passengers_number" name="book[passengers]" type="number" min="1" max="5" value="1"/>
+						</div>
+					</div>
+				<table class="table table-condensed">
+					<thead>
+						<tr>
+							<th> Departure </th>
+							<th> Destination </th>
+							<th> Departure Date </th>
+							<th> Arrival Date </th>
+							<th> Booking </th>
+						</tr>
+					</thead>
+					<tbody>
+						<% @flights.each do |flight| %>
+							<tr>
+								<td>
+									<%= flight.departure.country %> | <bold> <%= flight.departure.city%> </bold> | <%= flight.departure.airport_code %>
+								</td>
+
+								<td>
+									<%= flight.destination.country %> | <bold> <%= flight.destination.city %> </bold> | <%= flight.destination.airport_code %>
+								</td>
+
+								<td>
+									<%= flight.departure_date.strftime("%d/%m/%y") %>
+									<br>
+									<%= sprintf '%02d', flight.departure_hour %>:<%= sprintf '%02d', flight.departure_minutes %>
+								</td>
+
+								<td>
+									<%= flight.arrival_date.strftime("%d/%m/%y") %>
+									<br>
+									<%= sprintf '%02d', flight.arrival_hour %>:<%= sprintf '%02d', flight.arrival_minutes %>
+								</td>
+								<td>
+									<div class="form-row">
+										<div class="col">
+											<label> Book </label>
+											<input name="book[flight_id]" type="radio" value="<%= flight.id %>"/>
+										</div>
+									</div>
+								</td>
+							</tr>
+						<% end %>
+					</tbody>
+				</table>
+				</form>
+			</div>
+		</div>
+	</div>
+<% end %>
